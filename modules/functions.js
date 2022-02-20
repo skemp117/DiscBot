@@ -37,10 +37,11 @@ async function playYT(guild, queue, seektime) {
       serverQueue.connection
         .play(readStream,{seek: seektime/1000, type: codecType}) //249 was lowestaudio
         .on("finish", () => {
-              setTimeout(function() {
+              // setTimeout(function() {
                 serverQueue.songs.shift();
-                playYT(guild, queue, null);}, 500);
-            })
+                playYT(guild, queue, null);
+              // }, 500);
+        })
         .on("error", error => logger.log(error,"error"))
         .setVolume(serverQueue.volume/YT_VOL_MULT); // if you don't do this, YT plays super loud
     if (seektime != 0){
@@ -125,7 +126,8 @@ async function executePlayFile(client, message, args) {
           .play(readStream,{type: 'ogg/opus', highWaterMark: 3, volume: serverQueue.filevolume})
           .on("finish", () => {
             if ((serverQueue.songs.length>0) && (!pausebool)){
-              setTimeout(function() {playYT(message.guild, queue, serverQueue.seektime);}, 500);
+              // setTimeout(function() {playYT(message.guild, queue, serverQueue.seektime);}, 500);
+              playYT(message.guild, queue, serverQueue.seektime);
             }
           })
           .on("error", error => logger.log(error,"error"));
@@ -137,7 +139,8 @@ async function executePlayFile(client, message, args) {
         serverQueue.connection
           .play(readStream,{type: 'ogg/opus', highWaterMark: 3, volume: serverQueue.filevolume})
           .on("finish", () => {
-            setTimeout(function() {voiceChannel.leave();}, 500);
+            // setTimeout(function() {voiceChannel.leave();}, 500);
+            voiceChannel.leave();
           })
           .on("error", error => logger.log(error,"error"));
       }).catch(err => logger.log(err,"error"));

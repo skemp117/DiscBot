@@ -14,7 +14,7 @@ exports.run = (client, message, args) => {
       output += `**${prefix}${c.help.name}** ${c.help.args}\n`;
     });
     output += `\nFor help on a specific command, type **${prefix}help <command>**\n`;
-    message.channel.send(output);
+    message.channel.send(output,{ split: true });
   } else {
     // Show individual command's help.
     let command = args[0];
