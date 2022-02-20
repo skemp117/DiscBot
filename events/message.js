@@ -2,7 +2,7 @@ const {prefix,DATA_DIR,AUDIO_DIR,CHILD_DIR,GROUP_DIR,TIMEOUT} = require("../conf
 const logger = require("../modules/Logger.js");
 const { existsSync, mkdirSync } = require("fs");
 const { join } = require('path');
-var lastcmd = null;
+// var lastcmd = null;
 
 module.exports = async (client, message) => {
     // Grab the container from the client to reduce line length.
@@ -19,13 +19,13 @@ module.exports = async (client, message) => {
   const gid = message.guild.id;
   const {homedir} = client.container;
 
-  //Ignore command for a short TIMEOUT if we are recieving too many at a time
-  if (!lastcmd){
-    lastcmd = Date.now()
-  }else if (Date.now()-lastcmd < TIMEOUT){
-    return logger.log("Command timeout breached","error");
-  }
-  lastcmd = Date.now();
+  // //Ignore command for a short TIMEOUT if we are recieving too many at a time
+  // if (!lastcmd){
+  //   lastcmd = Date.now()
+  // }else if (Date.now()-lastcmd < TIMEOUT){
+  //   return logger.log("Command timeout breached","error");
+  // }
+  // lastcmd = Date.now();
 
   // Check if directory exists for the guild in the database, if not, create guild folders in database
   if (!existsSync(join(homedir,DATA_DIR,gid))) {

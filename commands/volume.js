@@ -21,10 +21,12 @@ exports.run = (client, message, args) => {
     }else{
         serverQueue.volume = vol; //dont divide by YT_VOL_MULT here, it is done at the playYT function 
         serverQueue.filevolume = vol;
-        if (!serverQueue.playFileBool){
-            serverQueue.connection.dispatcher.setVolume(vol/YT_VOL_MULT); // if you reduce this, YT plays super loud
-        } else {
-            serverQueue.connection.dispatcher.setVolume(vol);
+        if (!!serverQueue.connection.dispatcher){
+          if (!serverQueue.playFileBool){
+              serverQueue.connection.dispatcher.setVolume(vol/YT_VOL_MULT); // if you reduce this, YT plays super loud
+          } else {
+              serverQueue.connection.dispatcher.setVolume(vol);
+          }
         }
     }
     return message.channel.send(

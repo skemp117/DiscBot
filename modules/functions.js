@@ -23,7 +23,7 @@ async function playYT(guild, queue, seektime) {
     let codecType = null;
     if (seektime==null) {
       seektime = 0; 
-      codecType = 'webm/opus';
+      codecType = 'webm/opus'; // I would like to use the webm/opus codec all the time, but it doesn't support seek
     }
     const gid = guild.id;
     const serverQueue = queue.get(gid);
