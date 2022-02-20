@@ -1,0 +1,13 @@
+{
+    "prefix": "!",
+    "token": "<discord_token>",
+    "AUDIO_DIR": "Audio",
+    "GROUP_DIR": "group",
+    "CHILD_DIR": "child",
+    "DATA_DIR": "database",
+    "invalidnames": ["Audio","child","group","command","<file_or_group>"],
+    "AUDIO_EXT": ".ogg",
+    "YT_VOL_MULT": 5,
+    "LOG_FILE":"error.log",
+    "TIMEOUT": 100
+}

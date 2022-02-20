@@ -1,0 +1,7 @@
+node_modules
+config.json
+scratch.txt
+test.js
+database/**
+.vs
+error.log
