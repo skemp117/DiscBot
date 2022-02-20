@@ -1,7 +1,7 @@
 const getYoutubeTitle = require('get-youtube-title');
 const getYouTubeID = require('get-youtube-id');
 const ytdl = require("ytdl-core");
-const {YT_VOL_MULT,AUDIO_EXT, GROUP_DIR, AUDIO_DIR, DATA_DIR} = require("../config.json");
+const {VOL_MULT,YT_VOL_MULT,AUDIO_EXT, GROUP_DIR, AUDIO_DIR, DATA_DIR} = require("../config.json");
 const {existsSync, readFileSync, writeFileSync, unlinkSync, createReadStream} = require("fs");
 const { join } = require('path');
 const ffmpeg = require('fluent-ffmpeg');
@@ -37,10 +37,10 @@ async function playYT(guild, queue, seektime) {
       serverQueue.connection
         .play(readStream,{seek: seektime/1000, type: codecType}) //249 was lowestaudio
         .on("finish", () => {
-              // setTimeout(function() {
+              setTimeout(function() {
                 serverQueue.songs.shift();
                 playYT(guild, queue, null);
-              // }, 500);
+              }, 500);
         })
         .on("error", error => logger.log(error,"error"))
         .setVolume(serverQueue.volume/YT_VOL_MULT); // if you don't do this, YT plays super loud
@@ -123,11 +123,12 @@ async function executePlayFile(client, message, args) {
       serverQueue.seektime = serverQueue.connection.dispatcher.pausedSince-starttime;
       let readStream = createReadStream(join(audiodir,fn+AUDIO_EXT));
       serverQueue.connection
-          .play(readStream,{type: 'ogg/opus', highWaterMark: 3, volume: serverQueue.filevolume})
+          .play(readStream,{type: 'ogg/opus', highWaterMark: 3, volume: serverQueue.filevolume/VOL_MULT})
           .on("finish", () => {
             if ((serverQueue.songs.length>0) && (!pausebool)){
-              // setTimeout(function() {playYT(message.guild, queue, serverQueue.seektime);}, 500);
-              playYT(message.guild, queue, serverQueue.seektime);
+              setTimeout(function() {
+                playYT(message.guild, queue, serverQueue.seektime);
+              }, 500);
             }
           })
           .on("error", error => logger.log(error,"error"));
@@ -137,10 +138,11 @@ async function executePlayFile(client, message, args) {
       voiceChannel.join().then(connection =>{
         serverQueue.connection = connection;
         serverQueue.connection
-          .play(readStream,{type: 'ogg/opus', highWaterMark: 3, volume: serverQueue.filevolume})
+          .play(readStream,{type: 'ogg/opus', highWaterMark: 3, volume: serverQueue.filevolume/VOL_MULT})
           .on("finish", () => {
-            // setTimeout(function() {voiceChannel.leave();}, 500);
-            voiceChannel.leave();
+            setTimeout(function() {
+              voiceChannel.leave();
+            }, 500);
           })
           .on("error", error => logger.log(error,"error"));
       }).catch(err => logger.log(err,"error"));

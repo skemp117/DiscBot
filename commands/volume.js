@@ -1,4 +1,4 @@
-const {YT_VOL_MULT} = require("../config.json");
+const {VOL_MULT,YT_VOL_MULT} = require("../config.json");
 const {createServerQueue} = require("../modules/functions.js");
 
 exports.run = (client, message, args) => {
@@ -25,7 +25,7 @@ exports.run = (client, message, args) => {
           if (!serverQueue.playFileBool){
               serverQueue.connection.dispatcher.setVolume(vol/YT_VOL_MULT); // if you reduce this, YT plays super loud
           } else {
-              serverQueue.connection.dispatcher.setVolume(vol);
+              serverQueue.connection.dispatcher.setVolume(vol/VOL_MULT);
           }
         }
     }
