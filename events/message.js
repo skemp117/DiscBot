@@ -1,4 +1,4 @@
-const {prefix,DATA_DIR,AUDIO_DIR,CHILD_DIR,GROUP_DIR,TIMEOUT} = require("../config.json");
+const {prefix,DATA_DIR,AUDIO_DIR,CHILD_DIR,GROUP_DIR,ignoredcommands,TIMEOUT} = require("../config.json");
 const logger = require("../modules/Logger.js");
 const { existsSync, mkdirSync } = require("fs");
 const { join } = require('path');
@@ -11,6 +11,10 @@ module.exports = async (client, message) => {
   // and not get into a spam loop (we call that "botception").
   if (message.author.bot) return;
   if (!message.content.startsWith(prefix)) return;
+  for (ic of ignoredcommands){
+    if (message.content.startsWith(`${prefix}${ignoredcommands}`)) return;
+  }
+
 
   const args = message.content.slice(prefix[0].length).trim().split(/ +/g);
   const command = args.shift();
