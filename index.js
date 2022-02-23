@@ -9,6 +9,13 @@ const { Client, Intents, Collection } = require("discord.js");
 // We also load the rest of the things we need in this file:
 const { readdirSync } = require("fs");
 const logger = require("./modules/Logger.js");
+
+process.on('uncaughtException', err => {
+  logger.error(err)
+  
+  process.exit(1) //mandatory (as per the Node.js docs)
+});
+
 // This is your client. Some people call it `bot`, some people call it `self`,
 // some might call it `cootchie`. Either way, when you see `client.something`,
 // or `bot.something`, this is what we're referring to. Your client.
