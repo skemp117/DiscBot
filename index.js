@@ -36,8 +36,6 @@ client.container = {
 };
 
 const init = async () => {
-
-  readdirSync('penis')
   // Here we load **commands** into memory, as a collection, so they're accessible
   // here and everywhere else.
   const commands = readdirSync("./commands/").filter(file => file.endsWith(".js"));
