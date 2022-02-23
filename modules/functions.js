@@ -42,7 +42,7 @@ async function playYT(guild, queue, seektime) {
                 playYT(guild, queue, null);
               }, 500);
         })
-        .on("error", error => logger.log(error,"error"))
+        .on("error", err => logger.error(err))
         .setVolume(serverQueue.volume/YT_VOL_MULT); // if you don't do this, YT plays super loud
     if (seektime != 0){
       serverQueue.textChannel.send(`Resuming: **${song.title}**`);
@@ -74,7 +74,7 @@ async function playYT(guild, queue, seektime) {
         serverQueue.connection = connection;
         playYT(message.guild, queue, null);
       } catch (err) {
-        logger.log(err,"error");
+        logger.error(err);
         queue.delete(gid);
         return message.channel.send(err);
       }
@@ -131,7 +131,7 @@ async function executePlayFile(client, message, args) {
               }, 500);
             }
           })
-          .on("error", error => logger.log(error,"error"));
+          .on("error", err => logger.error(err));
     }
     else { //if there isnt a song playing
       let readStream = createReadStream(join(audiodir,fn+AUDIO_EXT));
@@ -144,8 +144,8 @@ async function executePlayFile(client, message, args) {
               voiceChannel.leave();
             }, 500);
           })
-          .on("error", error => logger.log(error,"error"));
-      }).catch(err => logger.log(err,"error"));
+          .on("error", err => logger.error(err));
+      }).catch(err => logger.error(err));
     }
     serverQueue.playFileBool = true;
     return 
@@ -311,7 +311,7 @@ function convert_mp3_to_ogg(input, callback) {
     .on('end', function() {
         callback(null);
     }).on('error', function(err){
-        logger.log(err,"error");
+        logger.error(err);
         callback(err);
     }).run();
 }

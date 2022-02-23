@@ -38,7 +38,7 @@ exports.run = (client, message, args) => {
     message.channel.send("Downloading and converting file");
     let fn = join(audiodir,`${message.attachments.first().name}`);
     request.get(message.attachments.first().url)
-        .on('error', (err)=>{logger.log(err,"error")})
+        .on('error', (err)=>{logger.error(err)})
         .pipe(createWriteStream(fn))
         .on('finish',function(){
         convert_mp3_to_ogg(fn, (err)=>{
@@ -48,7 +48,7 @@ exports.run = (client, message, args) => {
                     "Upload Successful!"
                 );
             }else{
-                logger.log(err,"error")
+                logger.error(err)
                 return message.channel.send(
                     "Upload unsuccessful, file may be corrupt!"
                 );

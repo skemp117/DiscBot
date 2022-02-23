@@ -44,17 +44,17 @@ module.exports = async (client, message) => {
     try {
         await cmd.run(client, message, args);
       } catch (e) {
-        logger.log(e,"error");
+        logger.error(e);
         message.channel.send({ content: `There was a problem with your request.\n\`\`\`${e.message}\`\`\`` })
-          .catch(e => logger.log("An error occurred replying on an error", "error"));
+          .catch(e => logger.error("An error occurred replying on an error"));
       }
   } else { //if a registered command isnt entered, default to playFile
     try {
         await container.commands.get("play").run(client, message, [].concat("playFile",command,args));
     } catch (e) {
-        logger.log(e,"error");
+        logger.error(e);
         message.channel.send({ content: `There was a problem with your request.\n\`\`\`${e.message}\`\`\`` })
-            .catch(e => logger.log("An error occurred replying on an error", "error"));
+            .catch(e => logger.error("An error occurred replying on an error"));
     }
     return;
   }

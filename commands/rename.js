@@ -36,7 +36,7 @@ exports.run = async (client, message, args) => {
         jsonAppend(message,childarr,newname,CHILD_DIR,client); // append new name to all members in group
         jsonRemove(message,childarr,oldname,CHILD_DIR,client); // remove old name from all members in group
         rename(filepath, newfilepath, function(err) { //rename json file
-          if ( err ) logger.log(err,"error");
+          if ( err ) logger.error(err);
         });
       }
     }else{
@@ -47,11 +47,11 @@ exports.run = async (client, message, args) => {
         jsonAppend(message,parentarr,newname,GROUP_DIR,client); // append new name to all groups this is a member of
         jsonRemove(message,parentarr,oldname,GROUP_DIR,client); // remove old name from all groups this is a member of
         rename(join(audiodir,CHILD_DIR,oldname+'.json'), join(audiodir,CHILD_DIR,newname+'.json'), function(err) { //rename json file
-          if ( err ) logger.log(err,"error");
+          if ( err ) logger.error(err);
         });
       }
       rename(filepath, newfilepath, function(err) { //rename json file
-        if ( err ) logger.log(err,"error");
+        if ( err ) logger.error(err);
       });
     }
 }
