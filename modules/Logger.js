@@ -3,15 +3,15 @@ Logger class for easy and aesthetically pleasing console logging
 */
 const { cyan, red, magenta, gray, yellow, white, green } = require("colorette");
 const { Timestamp } = require("@sapphire/time-utilities");
-const {appendFile, existsSync, writeFile} = require('fs');
+const {appendFile, existsSync, writeFile, appendFileSync} = require('fs');
 const {LOG_FILE} = require('../config.json')
 
-exports.log = (content, type = "log") => {
+exports.log = (content, type) => {
   const timestamp = `[${cyan(new Timestamp("YYYY-MM-DD HH:mm:ss"))}]:`;
   if (!existsSync(LOG_FILE)){writeFile(LOG_FILE,'',(err)=>{
     if (err) console.error(err);
   })}
-  appendFile(LOG_FILE, `\n${new Timestamp("YYYY-MM-DD HH:mm:ss")}\t${content}`, function (err) {
+  appendFileSync(LOG_FILE, `\n${new Timestamp("YYYY-MM-DD HH:mm:ss")}\t${content}`, (err) => {
     if (err) console.error(err);
   });
   switch (type) {
