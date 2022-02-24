@@ -5,7 +5,7 @@ const { join } = require('path');
 
 exports.run = async (client, message, args) => {
     const gid = message.guild.id;
-    const {homedir, invalidnames} = client.container;
+    const {homedir} = client.container;
     const audiodir = join(homedir,DATA_DIR,gid,AUDIO_DIR);
 
     let fn2deletearr = message.content.split(" ").slice(1);

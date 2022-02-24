@@ -1,14 +1,14 @@
 {
   "name": "discbot",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.2.1",
+  "description": "Discord bot for playing audio files and YT videos",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["Discord","bot","audio","YouTube"],
+  "author": "skemp117",
+  "license": "MIT",
   "dependencies": {
     "colorette": "^2.0.16",
     "discord.js": "^12.5.3",
