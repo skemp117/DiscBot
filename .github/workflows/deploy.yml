@@ -33,9 +33,9 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v2
-        with:
-          name: app-build
+      # - uses: actions/download-artifact@v2
+      #   with:
+      #     name: app-build
       - name: Upload to server
         uses: appleboy/scp-action@master
         with:
