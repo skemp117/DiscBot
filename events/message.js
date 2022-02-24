@@ -15,7 +15,6 @@ module.exports = async (client, message) => {
     if (message.content.startsWith(`${prefix}${ignoredcommands}`)) return;
   }
 
-
   const args = message.content.slice(prefix[0].length).trim().split(/ +/g);
   const command = args.shift();
   const cmd = container.commands.get(command);
