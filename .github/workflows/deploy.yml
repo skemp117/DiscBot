@@ -12,18 +12,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      # - name: Setup Node.js
-      #   uses: actions/setup-node@v2-beta
-      #   with:
-      #     node-version: '16'
-      #     architecture: 'armv6l' #can't do this because node 16 isn't even supported on the pi officially
-      #     check-latest: true
-      # - name: Install NPM dependencies
-      #   run: npm ci
       - name: Create deployment artifact
         env:
           GITHUB_SHA: ${{ github.sha }}
-        run: tar -czf "${GITHUB_SHA}".tar.gz --exclude=*.git *
+        run: tar -czf "${GITHUB_SHA}".tar.gz
       - name: Put built assets in Artifacts
         uses: actions/upload-artifact@v1
         with:
