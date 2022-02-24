@@ -1,4 +1,4 @@
-const {prefix,DATA_DIR,AUDIO_DIR,CHILD_DIR,GROUP_DIR,TIMEOUT} = require("../config.json");
+const {prefix,DATA_DIR,AUDIO_DIR,CHILD_DIR,GROUP_DIR,invalidnames} = require("../config.json");
 const logger = require("../modules/Logger.js");
 const { existsSync, mkdirSync } = require("fs");
 const { join } = require('path');
