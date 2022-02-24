@@ -1,0 +1,62 @@
+# Actions define a job that runs on a GitHub runner (separate from the repo)
+
+# Defines the conditions under which the job will run
+on:
+  push:
+    branches: [ master ] # or main, if you use that
+
+# Defines the jobs, of which we have two: "build" and "deploy"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: '12'
+          check-latest: true
+      - name: Install NPM dependencies
+        run: npm ci
+      - name: Create deployment artifact
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+        run: tar -czf "${GITHUB_SHA}".tar.gz --exclude=*.git *
+      - name: Put built assets in Artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: app-build
+          path: ${{ github.sha }}.tar.gz
+  deploy:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: app-build
+      - name: Upload to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: ${{ github.sha }}.tar.gz
+          target: /tmp/artifacts
+          timeout: 5m
+      - name: Extract artifact and run deployment scripts
+        uses: appleboy/ssh-action@master
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          envs: GITHUB_SHA
+          script_stop: true
+          script: |
+            cd ${{ secrets.SERVER_PATH }}
+            tar xzf /tmp/artifacts/${GITHUB_SHA}.tar.gz -C "${{ secrets.SERVER_PATH }}"
+            ./deploy.sh || true # Or Whatever script you want to run here
