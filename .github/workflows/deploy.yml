@@ -3,7 +3,7 @@
 # Defines the conditions under which the job will run
 on:
   push:
-    branches: [ master ] # or main, if you use that
+    branches: [ main ] # or main, if you use that
 
 # Defines the jobs, of which we have two: "build" and "deploy"
 jobs:
