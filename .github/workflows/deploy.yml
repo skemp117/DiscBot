@@ -59,4 +59,5 @@ jobs:
           script: |
             cd ${{ secrets.SERVER_PATH }}
             tar xzf /tmp/artifacts/${GITHUB_SHA}.tar.gz -C "${{ secrets.SERVER_PATH }}"
+            chmod 777 ./deploy.sh
             ./deploy.sh || true # Or Whatever script you want to run here
