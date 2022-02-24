@@ -154,7 +154,6 @@ async function executePlayFile(client, message, args) {
   function extractArgs(message, client){
     const gid = message.guild.id;
     const {homedir} = client.container;
-    const audiodir = join(homedir,DATA_DIR,gid,AUDIO_DIR);
     //Process commands, extract arguments
     let iserr = true;
     let args1 = message.content.split("!")[1];
@@ -207,7 +206,10 @@ function jsonAppend(message,parentarr,childarr,parentfolder,client){
   const gid = message.guild.id;
   const {homedir} = client.container;
   const audiodir = join(homedir,DATA_DIR,gid,AUDIO_DIR);
-  const {invalidnames} = client.container
+  const ignore_path = join(homedir,DATA_DIR,gid,'guildIgnores.json');
+  const ignorethese = JSON.parse(readFileSync(ignore_path))
+  const {invalidnames} = client.container;
+  restrictednames = Object.values({...invalidnames, ...ignorethese});
   
   if (!Array.isArray(parentarr)){
     parentarr = [parentarr];
@@ -223,7 +225,7 @@ function jsonAppend(message,parentarr,childarr,parentfolder,client){
           let sendstr = "Group cannot have same name as file: "+parent+", please choose new filename"
           message.channel.send(sendstr);
           return true;
-        }else if (invalidnames.indexOf(parent)!== -1){
+        }else if (restrictednames.indexOf(parent)!== -1){
           let sendstr = "Invalid group name: "+parent+". reserved for commands"
           message.channel.send(sendstr);
           return true;
@@ -238,7 +240,7 @@ function jsonAppend(message,parentarr,childarr,parentfolder,client){
     let rawdata = readFileSync(parentpath);
     let str = JSON.parse(rawdata);
     childarr.every((child) => {
-      if (invalidnames.indexOf(child)!== -1){
+      if (restrictednames.indexOf(child)!== -1){
         return true;
       }else{
         if (str.indexOf(child)==-1){

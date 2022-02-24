@@ -19,6 +19,6 @@ exports.run = async (client, message, args) => {
 
 exports.help = {
     name: "group",
-    description: `Groups audio files into groups. Members of groups can be played at random with ${prefix}group`,
+    description: `Groups audio files into groups. Members of groups can be played at random with ${prefix}<group>`,
     args: `**<file1>** *... <fileN>*  **| <group1>** *... <groupM>*`
 };

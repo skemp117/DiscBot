@@ -11,15 +11,15 @@ exports.run = (client, message, args) => {
     const groupFiles = readdirSync(join(audiodir,GROUP_DIR)).filter(file => file.endsWith('.json'));
         for (const file of groupFiles) {
             if(invalidnames.indexOf(file.split('.')[0])==-1){
-            fnstring += '\n\t!';
-            fnstring += file.split('.')[0];
-            fnstring += '\t\t'
-            let childarr = JSON.parse(readFileSync(join(audiodir,GROUP_DIR,file)));
-            childarr.forEach((child)=>{
-                fnstring += '\t'
-                fnstring += child;
-            });
-            }
+                fnstring += '\n\t!';
+                fnstring += file.split('.')[0];
+                fnstring += '\t\t'
+                let childarr = JSON.parse(readFileSync(join(audiodir,GROUP_DIR,file)));
+                childarr.forEach((child)=>{
+                    fnstring += '\t'
+                    fnstring += child;
+                }
+            );}
         }
     return message.channel.send(
         fnstring

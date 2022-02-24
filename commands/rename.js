@@ -8,6 +8,8 @@ exports.run = async (client, message, args) => {
     const gid = message.guild.id;
     const {homedir, invalidnames} = client.container;
     const audiodir = join(homedir,DATA_DIR,gid,AUDIO_DIR);
+    const ignore_path = join(homedir,DATA_DIR,gid,'guildIgnores.json');
+    const ignorethese = JSON.parse(readFileSync(ignore_path));
 
     let fn2rename = message.content.split(" ").slice(1);
     if (fn2rename.length>2){
@@ -21,6 +23,9 @@ exports.run = async (client, message, args) => {
     if (invalidnames.indexOf(newname)!== -1){
         return message.channel.send(`Invalid name: ${newname}. reserved for commands`);
     }
+    if (ignorethese.indexOf(newname)!== -1){
+      return message.channel.send(`Invalid name: ${newname}. reserved for ignored commands in this guild`);
+  }
 
     let filepath = join(audiodir,oldname+AUDIO_EXT)
     if (!existsSync(filepath)){

@@ -1,5 +1,5 @@
 const { AUDIO_DIR, AUDIO_EXT, DATA_DIR} = require("../config.json");
-const { createWriteStream, unlinkSync, existsSync } = require("fs");
+const { createWriteStream, unlinkSync, existsSync,readFileSync } = require("fs");
 const { convert_mp3_to_ogg } = require("../modules/functions.js")
 const { join } = require('path');
 const request = require(`request`);
@@ -9,6 +9,8 @@ exports.run = (client, message, args) => {
     const gid = message.guild.id;
     const {homedir, invalidnames} = client.container;
     const audiodir = join(homedir,DATA_DIR,gid,AUDIO_DIR);
+    const ignore_path = join(homedir,DATA_DIR,gid,'guildIgnores.json');
+    const ignorethese = JSON.parse(readFileSync(ignore_path))
     
     if(!message.attachments.first()){//checks if an attachment is sent
         return message.channel.send(
@@ -33,6 +35,11 @@ exports.run = (client, message, args) => {
     if (invalidnames.indexOf(message.attachments.first().name.split('.')[0])!== -1){
         return message.channel.send(
             "Invalid filename. Reserved for commands"
+        );
+    }
+    if (ignorethese.indexOf(message.attachments.first().name.split('.')[0])!== -1){
+        return message.channel.send(
+            "Invalid filename. Reserved for ignored commands in this guild"
         );
     }
     message.channel.send("Downloading and converting file");
