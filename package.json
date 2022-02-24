@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@sapphire/time-utilities": "^1.6.0",
     "colorette": "^2.0.16",
     "discord.js": "^12.5.3",
     "fluent-ffmpeg": "^2.1.2",
