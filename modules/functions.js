@@ -134,11 +134,11 @@ async function executePlayFile(client, message, args) {
           .on("error", err => logger.error(err));
     }
     else { //if there isnt a song playing
-      let readStream = createReadStream(join(audiodir,fn+AUDIO_EXT));
+      let readStream = createReadStream(join(audiodir,fn+'.mp3'));
       voiceChannel.join().then(connection =>{
         serverQueue.connection = connection;
         serverQueue.connection
-          .play(readStream,{type: 'ogg/opus', highWaterMark: 3, volume: serverQueue.filevolume/VOL_MULT})
+          .play(readStream,{highWaterMark: 3, volume: serverQueue.filevolume/VOL_MULT})
           .on("finish", () => {
             setTimeout(function() {
               voiceChannel.leave();
