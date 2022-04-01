@@ -1,12 +1,12 @@
 {
   "name": "discbot",
   "version": "0.2.1",
-  "description": "Discord bot for playing audio files and YT videos",
+  "description": "Virtual soundboard. Discord bot for playing audio files and YT videos",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["Discord","bot","audio","YouTube"],
+  "keywords": ["Discord","bot","audio","YouTube","Soundboard","sound"],
   "author": "skemp117",
   "license": "MIT",
   "dependencies": {
