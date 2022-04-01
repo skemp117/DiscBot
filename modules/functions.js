@@ -123,7 +123,7 @@ async function executePlayFile(client, message, args) {
       serverQueue.seektime = serverQueue.connection.dispatcher.pausedSince-starttime;
       let readStream = createReadStream(join(audiodir,fn+AUDIO_EXT));
       serverQueue.connection
-          .play(readStream,{type: 'ogg/opus', highWaterMark: 3, volume: serverQueue.filevolume/VOL_MULT})
+          .play(readStream)
           .on("finish", () => {
             if ((serverQueue.songs.length>0) && (!pausebool)){
               setTimeout(function() {
@@ -134,11 +134,11 @@ async function executePlayFile(client, message, args) {
           .on("error", err => logger.error(err));
     }
     else { //if there isnt a song playing
-      let readStream = createReadStream(join(audiodir,fn+'.mp3'));
+      let readStream = createReadStream(join(audiodir,fn+AUDIO_EXT));
       voiceChannel.join().then(connection =>{
         serverQueue.connection = connection;
         serverQueue.connection
-          .play(readStream,{highWaterMark: 3, volume: serverQueue.filevolume/VOL_MULT})
+          .play(readStream)
           .on("finish", () => {
             setTimeout(function() {
               voiceChannel.leave();
