@@ -132,6 +132,7 @@ async function executePlayFile(client, message, args) {
             }
           })
           .on("error", err => logger.error(err));
+          .setVolume(serverQueue.filevolume/VOL_MULT);
     }
     else { //if there isnt a song playing
       let readStream = createReadStream(join(audiodir,fn+AUDIO_EXT));
@@ -145,6 +146,7 @@ async function executePlayFile(client, message, args) {
             }, 500);
           })
           .on("error", err => logger.error(err));
+          .setVolume(serverQueue.filevolume/VOL_MULT);
       }).catch(err => logger.error(err));
     }
     serverQueue.playFileBool = true;
