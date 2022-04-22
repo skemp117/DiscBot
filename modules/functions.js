@@ -131,7 +131,7 @@ async function executePlayFile(client, message, args) {
               }, 500);
             }
           })
-          .on("error", err => logger.error(err));
+          .on("error", err => logger.error(err))
           .setVolume(serverQueue.filevolume/VOL_MULT);
     }
     else { //if there isnt a song playing
@@ -145,8 +145,8 @@ async function executePlayFile(client, message, args) {
               voiceChannel.leave();
             }, 500);
           })
-          .on("error", err => logger.error(err));
-          .setVolume(serverQueue.filevolume/VOL_MULT);
+          .on("error", err => logger.error(err))
+          .setVolume(serverQueue.filevolume/VOL_MULT)
       }).catch(err => logger.error(err));
     }
     serverQueue.playFileBool = true;
