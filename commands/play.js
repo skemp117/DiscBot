@@ -54,33 +54,12 @@ exports.run = async (client, message, args) => {
       serverQueue.voiceChannel = voiceChannel;
     }
 
-  if (!client.voice.connections.get(gid)){
-      try {
-          let connection = await voiceChannel.join();
-          return serverQueue.connection = connection;
-      } catch (err) {
-          logger.error(err);
-          queue.delete(gid);
-          return message.channel.send(err);
-      }
-  }
-  if (client.voice.connections.get(gid).channel.id !== voiceChannel.id) {
-      try {
-          let connection = await voiceChannel.join();
-          serverQueue.connection = connection;
-      } catch (err) {
-          logger.error(err);
-          queue.delete(gid);
-          return message.channel.send(err);
-      }
-  } 
-
     if (playFileBool){
       queue.get(gid).filevolume = vol;
       executePlayFile(client, message, args)
     } else {
       queue.get(gid).volume = vol;
-      executePlayYT(voiceChannel,gid,message,queue,args[0]);
+      executePlayYT(client,voiceChannel,gid,message,queue,args[0]);
     }
 }
 exports.help = {

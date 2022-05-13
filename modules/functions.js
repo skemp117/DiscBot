@@ -60,7 +60,7 @@ async function playYT(guild, queue, seektime) {
     return;
   }
 
-  async function executePlayYT(voiceChannel,gid,message,queue,url){
+  async function executePlayYT(client,voiceChannel,gid,message,queue,url){
     const serverQueue = queue.get(gid);
     let song = [];
     let id = getYouTubeID(url,{fussy:false});
@@ -75,6 +75,26 @@ async function playYT(guild, queue, seektime) {
     }
     if (serverQueue.songs.length < 1 || !serverQueue.songs){
         serverQueue.songs.push(song);
+        if (!client.voice.connections.get(gid)){
+            try {
+                let connection = await voiceChannel.join();
+                serverQueue.connection = connection;
+            } catch (err) {
+                logger.error(err);
+                queue.delete(gid);
+                return message.channel.send(err);
+            }
+        }
+        if (client.voice.connections.get(gid).channel.id !== voiceChannel.id) {
+            try {
+                let connection = await voiceChannel.join();
+                serverQueue.connection = connection;
+            } catch (err) {
+                logger.error(err);
+                queue.delete(gid);
+                return message.channel.send(err);
+            }
+        } 
         playYT(message.guild, queue, null);
     } else {
         serverQueue.songs.push(song);
@@ -104,6 +124,27 @@ async function executePlayFile(client, message, args) {
       }
     }
     const voiceChannel = message.member.voice.channel;
+
+    if (!client.voice.connections.get(gid)){
+      try {
+          let connection = await voiceChannel.join();
+          serverQueue.connection = connection;
+      } catch (err) {
+          logger.error(err);
+          queue.delete(gid);
+          return message.channel.send(err);
+      }
+  }
+  if (client.voice.connections.get(gid).channel.id !== voiceChannel.id) {
+      try {
+          let connection = await voiceChannel.join();
+          serverQueue.connection = connection;
+      } catch (err) {
+          logger.error(err);
+          queue.delete(gid);
+          return message.channel.send(err);
+      }
+  } 
     
     let { starttime, pausebool, songs } = serverQueue;
     if (!pausebool && songs.length>0){ //if there is a song playing condition being we aren't paused and 
