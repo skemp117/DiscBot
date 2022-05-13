@@ -60,7 +60,7 @@ const init = async () => {
   // Be sure to leave when voice channel is empty
   client.on('voiceStateUpdate', (oldState, newState) => {
     const {queue} =  client.container;
-    const serverQueue = queue.get(message.guild.id);
+    const serverQueue = queue.get(oldState.guild.id);
     // if nobody left the channel in question, return.
     if (oldState.channelID !==  oldState.guild.me.voice.channelID || newState.channel)
       return;
@@ -74,10 +74,7 @@ const init = async () => {
               serverQueue.voiceChannel.leave();
               return queue.delete(serverQueue.voiceChannel.guild.id);
           }
-          if (!!message.guild.me.voice.channel) {
-              return message.guild.me.voice.channel.leave();
-          }
-           oldState.channel.leave(); // leave
+          oldState.channel.leave(); // leave
        }, 5000); // (5 sec in ms)
   });
 
