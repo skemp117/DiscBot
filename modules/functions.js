@@ -1,18 +1,23 @@
 const getYoutubeTitle = require('get-youtube-title');
 const getYouTubeID = require('get-youtube-id');
 const ytdl = require("ytdl-core");
-const {VOL_MULT,YT_VOL_MULT,AUDIO_EXT, GROUP_DIR, AUDIO_DIR, DATA_DIR} = require("../config.json");
+const {VOL_MULT,YT_VOL_MULT,AUDIO_EXT, GROUP_DIR, AUDIO_DIR, DATA_DIR, YT_KEY} = require("../config.json");
 const {existsSync, readFileSync, writeFileSync, unlinkSync, createReadStream} = require("fs");
 const { join } = require('path');
 const ffmpeg = require('fluent-ffmpeg');
 const logger = require("./Logger.js");
 
 function myGetYoutubeTitle(id) {
+    key = YT_KEY;
+    if (key === "<your-api-key>"){
+      key = null;
+    }
     return new Promise((resolve) => {
-      getYoutubeTitle(id,(err,title)=>{
+      getYoutubeTitle(id, key, (err,title)=>{
         if (!err){
           resolve(title);
         }else{
+          logger.error(err);
           resolve('Title Not Found');
         }
       })
@@ -29,7 +34,6 @@ async function playYT(guild, queue, seektime) {
     const serverQueue = queue.get(gid);
     let song = serverQueue.songs[0];
     if (!song) {
-      serverQueue.voiceChannel.leave();
       queue.delete(gid);
       return;
     }
@@ -68,16 +72,8 @@ async function playYT(guild, queue, seektime) {
       url
     }
     if (serverQueue.songs.length < 1 || !serverQueue.songs){
-      serverQueue.songs.push(song);
-      try {
-        let connection = await voiceChannel.join();
-        serverQueue.connection = connection;
+        serverQueue.songs.push(song);
         playYT(message.guild, queue, null);
-      } catch (err) {
-        logger.error(err);
-        queue.delete(gid);
-        return message.channel.send(err);
-      }
     } else {
         serverQueue.songs.push(song);
         return message.channel.send(`${song.title} has been added to the queue!`);
@@ -106,17 +102,6 @@ async function executePlayFile(client, message, args) {
       }
     }
     const voiceChannel = message.member.voice.channel;
-    if (!voiceChannel){
-      return message.channel.send(
-        "You need to be in a voice channel to play music!"
-      );
-    }
-    const permissions = voiceChannel.permissionsFor(message.client.user);
-    if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
-      return message.channel.send(
-        "I need the permissions to join and speak in your voice channel!"
-      );
-    }
     let { starttime, pausebool, songs } = serverQueue;
     if (!pausebool && songs.length>0){ //if there is a song playing condition being we aren't paused and 
       serverQueue.connection.dispatcher.pause(true);
@@ -136,18 +121,10 @@ async function executePlayFile(client, message, args) {
     }
     else { //if there isnt a song playing
       let readStream = createReadStream(join(audiodir,fn+AUDIO_EXT));
-      voiceChannel.join().then(connection =>{
-        serverQueue.connection = connection;
-        serverQueue.connection
-          .play(readStream)
-          .on("finish", () => {
-            setTimeout(function() {
-              voiceChannel.leave();
-            }, 500);
-          })
-          .on("error", err => logger.error(err))
-          .setVolume(serverQueue.filevolume/VOL_MULT)
-      }).catch(err => logger.error(err));
+      serverQueue.connection
+        .play(readStream)
+        .on("error", err => logger.error(err))
+        .setVolume(serverQueue.filevolume/VOL_MULT)
     }
     serverQueue.playFileBool = true;
     return 

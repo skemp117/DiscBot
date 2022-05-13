@@ -1,6 +1,7 @@
 {
     "prefix": "!",
     "token": "<discord_token>",
+    "YT_KEY": "<your-api-key>",
     "AUDIO_DIR": "Audio",
     "GROUP_DIR": "group",
     "CHILD_DIR": "child",
