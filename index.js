@@ -59,6 +59,8 @@ const init = async () => {
 
   // Be sure to leave when voice channel is empty
   client.on('voiceStateUpdate', (oldState, newState) => {
+    const {queue} =  client.container;
+    const serverQueue = queue.get(message.guild.id);
     // if nobody left the channel in question, return.
     if (oldState.channelID !==  oldState.guild.me.voice.channelID || newState.channel)
       return;
@@ -66,7 +68,15 @@ const init = async () => {
     // otherwise, check how many people are in the channel now
     if (!oldState.channel.members.size - 1) 
       setTimeout(() => { // if 1 (you), wait five minutes
-        if (!oldState.channel.members.size - 1) // if there's still 1 member, 
+        if (!oldState.channel.members.size - 1) // if there's still 1 member,
+          if (serverQueue){
+              serverQueue.songs = [];
+              serverQueue.voiceChannel.leave();
+              return queue.delete(serverQueue.voiceChannel.guild.id);
+          }
+          if (!!message.guild.me.voice.channel) {
+              return message.guild.me.voice.channel.leave();
+          }
            oldState.channel.leave(); // leave
        }, 5000); // (5 sec in ms)
   });
