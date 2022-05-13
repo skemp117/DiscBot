@@ -34,7 +34,6 @@ async function playYT(guild, queue, seektime) {
     const serverQueue = queue.get(gid);
     let song = serverQueue.songs[0];
     if (!song) {
-      queue.delete(gid);
       return;
     }
       readStream =  ytdl(song.url,({download:false, filter: 'audioonly', highWaterMark: 3, quality: 249}));
@@ -43,6 +42,9 @@ async function playYT(guild, queue, seektime) {
         .on("finish", () => {
               setTimeout(function() {
                 serverQueue.songs.shift();
+                if (!song) {
+                  return;
+                }
                 playYT(guild, queue, null);
               }, 500);
         })
@@ -102,6 +104,7 @@ async function executePlayFile(client, message, args) {
       }
     }
     const voiceChannel = message.member.voice.channel;
+    
     let { starttime, pausebool, songs } = serverQueue;
     if (!pausebool && songs.length>0){ //if there is a song playing condition being we aren't paused and 
       serverQueue.connection.dispatcher.pause(true);
@@ -306,7 +309,6 @@ function createServerQueue(queue,message,voiceChannel,vol,playFileBool) {
     songs: [],
     volume: vol, 
     filevolume: vol,
-    playing: true,
     starttime: null,
     pausebool: false,
     seektime: null,
