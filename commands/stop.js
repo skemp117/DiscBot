@@ -7,7 +7,7 @@ exports.run = async (client, message, args) => {
     }
     const {queue} =  client.container
     const serverQueue = queue.get(message.guild.id)
-    if (!serverQueue){
+    if (!!serverQueue){
         serverQueue.starttime = null;
         serverQueue.pausebool = true;
         serverQueue.songs.shift();
