@@ -9,7 +9,7 @@ exports.run = async (client, message, args) => {
     const serverQueue = queue.get(message.guild.id)
     if (!!serverQueue){
         serverQueue.starttime = null;
-        serverQueue.pausebool = true;
+        serverQueue.pausebool = false;
         serverQueue.songs.shift();
         if (!!serverQueue.connection.dispatcher){
             serverQueue.connection.dispatcher.destroy();
