@@ -11,7 +11,6 @@ exports.run = async (client, message, args) => {
         serverQueue.starttime = null;
         serverQueue.pausebool = true;
         serverQueue.songs.shift();
-        console.log(serverQueue.connection.dispatcher)
         if (!serverQueue.connection.dispatcher){
             serverQueue.connection.dispatcher.destroy();
         }
