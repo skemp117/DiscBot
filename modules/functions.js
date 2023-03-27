@@ -82,7 +82,7 @@ async function playYT(guild, queue, seektime) {
             } catch (err) {
                 logger.error(err);
                 queue.delete(gid);
-                return message.channel.send(err);
+                return message.channel.send(err.toString());
             }
         }
         if (client.voice.connections.get(gid).channel.id !== voiceChannel.id) {
@@ -92,7 +92,7 @@ async function playYT(guild, queue, seektime) {
             } catch (err) {
                 logger.error(err);
                 queue.delete(gid);
-                return message.channel.send(err);
+                return message.channel.send(err.toString());
             }
         } 
         playYT(message.guild, queue, null);
@@ -132,7 +132,7 @@ async function executePlayFile(client, message, args) {
       } catch (err) {
           logger.error(err);
           queue.delete(gid);
-          return message.channel.send(err);
+          return message.channel.send(err.toString());
       }
   }
   if (client.voice.connections.get(gid).channel.id !== voiceChannel.id) {
@@ -142,7 +142,7 @@ async function executePlayFile(client, message, args) {
       } catch (err) {
           logger.error(err);
           queue.delete(gid);
-          return message.channel.send(err);
+          return message.channel.send(err.toString());
       }
   } 
     

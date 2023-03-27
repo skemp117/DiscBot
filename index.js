@@ -18,7 +18,14 @@ process.on('uncaughtException', err => {
 // This is your client. Some people call it `bot`, some people call it `self`,
 // some might call it `cootchie`. Either way, when you see `client.something`,
 // or `bot.something`, this is what we're referring to. Your client.
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({ 
+    intents: [
+        Intents.FLAGS.GUILDS,
+        Intents.FLAGS.GUILD_VOICE_STATES,
+        Intents.FLAGS.GUILD_MESSAGES,
+        Intents.FLAGS.DIRECT_MESSAGES
+    ] 
+});
 
 // Commands are put in collections where they can be
 // read from, catalogued, listed, etc.

@@ -12,7 +12,7 @@ exports.run = (client, message, args) => {
         "Volume argument must be numerical (between zero and 2)"
       );
     } else{
-      vol = Math.min(vol,2); // set max volume to 2
+      vol = Math.min(vol,200); // set max volume to 2
       vol = Math.max(vol,0); // set min volume to 0
     }
 
